@@ -73,3 +73,8 @@ class DES:
         else:
             key = self.tobin(key[:8])
             self.genKeys(key)
+
+
+if __name__ == "__main__":
+    d = DES()
+    f = d.applyDES(key="helloworld", text="WorldPeace")
