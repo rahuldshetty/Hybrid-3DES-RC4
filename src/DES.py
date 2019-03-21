@@ -15,7 +15,7 @@ class DES:
         text = list(map(ord, text))
         binVal = []
         for i in text:
-            f = [int(x) for x in "{0:b}".format(10)]
+            f = [int(x) for x in "{0:b}".format(i)]
             if len(f) < 8:
                 f = f[::-1]
                 while len(f) != 8:
@@ -78,3 +78,13 @@ class DES:
 if __name__ == "__main__":
     d = DES()
     f = d.applyDES(key="helloworld", text="WorldPeace")
+
+
+def is_pow_of(n):
+    i = n
+    while(i/2 > 2):
+        i = i / 2
+    return i == 2
+
+
+is_pow_of(2)
