@@ -22,6 +22,31 @@ inversePBox = [
 			33,1,41,9,49,17,57,25	
 ]
 
+exansionPBox=[
+	32,1,2,3,4,5,
+	4,5,6,7,8,9,
+	8,9,10,11,12,13,
+	12,13,14,15,16,17,
+	16,17,18,19,20,21,
+	20,21,22,23,24,25,
+	24,25,26,27,28,29,
+	28,29,30,31,32,1
+]
+
+straightPBox =[
+	16,7,20,21,29,12,28,17,
+	1,15,23,26,5,18,31,10,
+	2,8,24,14,32,27,3,9,
+	19,13,30,6,22,11,4,25
+]
+
+SBOX = [
+	[ "0010","1100","0100","0001","0111","1010","1011","0110","1000","0101","0011","1111","1101","0000","1110","1001"],
+	[ "1110","1011","0010","1100","0100","0111","1101","0001","0101","0000","1111","1010","0011","1001","1000","0110"],
+	[ "0100","0010","0001","1011","1010","1101","0111","1000","1111","1001","1100","0101","0110","0011","0000","1110"],
+	[ "1011","1000","1100","0111","0001","1110","0010","1101","0110","1111","0000","1001","1010","0100","0101","0011"]
+]
+
 class DES:
 
     ENCRYPT = 1
@@ -45,10 +70,25 @@ class DES:
             binVal += f
         return binVal
 
+    def binToInt(self,bin):
+    	bin=bin[::-1]
+    	i=1
+    	num=0
+    	ptr=0
+    	while ptr<len(bin):
+    		num+= i*int(bin[ptr])
+    		i=i*2
+    		ptr+=1
+    	return num
+
+
+
+
+
     def toString(self, binVal):
         # binary List to String
         text = ""
-        for i in range(0, len(binVal)-7, 8):
+        for i in range(0, len(binVal), 8):
             g = binVal[i:i+8]
             jnd = "".join([str(x) for x in g])
             val = int(jnd, 2)
@@ -100,7 +140,7 @@ class DES:
 
 
 
-    def applyDES(self, key, text, type=ENCRYPT):
+    def applyDES(self, key, text, type=1):
         if len(key) < 8:
             raise Exception("Key should be 8 bytes long.")
         else:
@@ -111,22 +151,63 @@ class DES:
         	self.keys=self.keys[::-1]
 
         binText = self.tobin(text)
-
         blocks=[binText[i:i+64] for i in range(0,len(binText),64)]
-
+        result=[]
         for i in range(len(blocks)):
         	blocks[i]+=[0]*(64-len(blocks[i]))
 
-        for block in blocks:
+        for i,block in enumerate(blocks):
         	#init permutation
         	initList = self.permute(block,initPBox)
-
         	data = initList
-
-        	finalList = self.permute(data,inversePBox)
-
+        	leftData,rightData=data[:32],data[32:]
         	
+        	
+        	for j in range(16):
+        		temp=rightData
+        		# Feistal Round function
+        		
+        		#exampnsionPBox
+        		newTemp=[]
+        		for pos in (exansionPBox):
+        			newTemp.append(temp[pos-1])
 
+        		#xor with key
+        		for k in range(len(newTemp)):
+        			newTemp[k]^=self.keys[j][k]
+
+        		#sbox grouping
+        		sblockData=[]
+        		for k in range(0,len(newTemp),6):
+        			sblock=(newTemp[k:k+6])
+        			row=str(sblock[0])+str(sblock[5])
+        			col="".join([str(x) for x in sblock[2:5] ])
+        			row=self.binToInt(row)
+        			col=self.binToInt(col)
+        			cell=SBOX[row][col]
+        			sblockData+=list(cell)
+
+        		tempS=[]
+        		#straight PBOX
+        		for k,pos in enumerate(straightPBox):
+        			tempS.append(int(sblockData[pos-1]))
+
+        		#xor with left half
+        		for i in range(len(tempS)):
+        			rightData[i]=(tempS[i]^leftData[i])
+
+        		if j!=15:
+        			leftData,rightData=rightData,leftData
+
+        	resultData=leftData+rightData
+
+        	#inverse permutation
+        	finalList = self.permute(resultData,inversePBox)
+        	result.append(self.toString(finalList))
+
+        self.result=result
+
+        return "".join(result)
 
       
 
