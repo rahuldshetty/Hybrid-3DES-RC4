@@ -81,10 +81,6 @@ class DES:
     		ptr+=1
     	return num
 
-
-
-
-
     def toString(self, binVal):
         # binary List to String
         text = ""
@@ -128,7 +124,6 @@ class DES:
             self.keys.append(finalKey)
         # resultant key added to self.keys list
 
-
     def permute(self,lists,box):
     	if len(lists)!=len(box):
     		raise Exception("Invalid permutation objects")
@@ -137,10 +132,7 @@ class DES:
     		newList[i]=lists[pos-1]
     	return newList
 
-
-
-
-    def applyDES(self, key, text, type=1):
+    def applyDES(self, key, text, type=1,rounds=16):
         if len(key) < 8:
             raise Exception("Key should be 8 bytes long.")
         else:
@@ -163,7 +155,7 @@ class DES:
         	leftData,rightData=data[:32],data[32:]
         	
         	
-        	for j in range(16):
+        	for j in range(rounds):
         		temp=rightData
         		# Feistal Round function
         		
@@ -194,9 +186,9 @@ class DES:
 
         		#xor with left half
         		for i in range(len(tempS)):
-        			rightData[i]=(tempS[i]^leftData[i])
+        			leftData[i]=(tempS[i]^leftData[i])
 
-        		if j!=15:
+        		if j!=rounds-1:
         			leftData,rightData=rightData,leftData
 
         	resultData=leftData+rightData
@@ -209,23 +201,12 @@ class DES:
 
         return "".join(result)
 
-      
+    def encrypt(self,text,key):
+        return self.applyDES(key,text,1,16)
+    
+    def decrypt(self,text,key):
+        return self.applyDES(key,text,0,16)
 
 
 
 
-
-
-if __name__ == "__main__":
-    d = DES()
-    f = d.applyDES(key="helloworld", text="WorldPeace")
-
-
-def is_pow_of(n):
-    i = n
-    while(i/2 > 2):
-        i = i / 2
-    return i == 2
-
-
-is_pow_of(2)
