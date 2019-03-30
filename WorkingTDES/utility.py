@@ -1,4 +1,3 @@
-
 def str2bin(string,fill=0):
     text=list(map(ord,string))
     binVal=""

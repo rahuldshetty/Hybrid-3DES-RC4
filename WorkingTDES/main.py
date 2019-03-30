@@ -1,14 +1,10 @@
-from DES import *
-from utility import *
-from TDES import *
+from XTDES import *
 
-
-tdes=TDES()
+tdes=XTDES()
 msg = "holaamigo"
 keys=["dsdadsas","afafsdfsdf","assdassss"]
 
 print("Original:",msg,"\n")
-
 
 enc=tdes.encrypt(msg,keys)
 print('Encrypted:',enc,"\n")
