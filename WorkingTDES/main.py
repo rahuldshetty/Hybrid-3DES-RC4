@@ -1,13 +1,13 @@
 from XTDES import *
 
-tdes=XTDES()
+tdes = XTDES()
 msg = "holaamigo"
-keys=["dsdadsas","afafsdfsdf","assdassss"]
+keys = ["dsdadsas", "afafsdfsdf", "assdassss"]
 
-print("Original:",msg,"\n")
+print("Original:", msg, "\n")
 
-enc=tdes.encrypt(msg,keys)
-print('Encrypted:',enc,"\n")
+enc = tdes.encrypt(msg, keys)
+print('Encrypted:', enc, "\n")
 
-dec=tdes.decrypt(enc,keys)
-print('Decrypted:',dec,"\n")
+dec = tdes.decrypt(enc, keys)
+print('Decrypted:', dec, "\n")
