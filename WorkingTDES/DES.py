@@ -245,8 +245,7 @@ class DES:
         return final
 
     @staticmethod
-    def applyDES(text,key,mode=ENCRYPT):
-        keys=DES.rc4Key(key)
+    def applyDES(text,keys,mode=ENCRYPT):
         if mode == DECRYPT:
             keys=keys[::-1]
         #text processing
@@ -268,4 +267,4 @@ class DES:
     
         
         
-        
+          
