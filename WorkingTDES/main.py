@@ -2,7 +2,12 @@ from XTDES import *
 
 tdes=XTDES()
 msg = input("Enter message:")
-keys=["dsdadsas","afafsdfsdf","assdassss"]
+
+k1=input('Enter key1:')
+k2=input('Enter key2:')
+k3=input('Enter key3:')
+
+keys=[k1,k2,k3]
 
 print("Original:",msg,"\n")
 
